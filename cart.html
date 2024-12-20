@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carrinho</title>
+  <link rel="stylesheet" href="css/cart.css"> <!-- Adicionando CSS -->
+</head>
+<body>
+  <header>
+    <h1>Carrinho de Compras</h1>
+    <a href="index.html" class="back-button">← Voltar para a Loja</a>
+  </header>
+
+  <div id="root" class="container"></div> <!-- Área onde o JS renderiza os itens do carrinho -->
+
+  <script src="./scripts/cart.js"></script>
+  <script>
+    // Função para buscar o carrinho do localStorage
+    function getCart() {
+      return JSON.parse(localStorage.getItem("cart")) || [];
+    }
+
+    function renderCart() {
+      const cart = getCart();
+      let total = 0;
+
+      let html = `<h2>Itens no Carrinho</h2>`;
+      if (cart.length === 0) {
+        html += `<p>O carrinho está vazio.</p>`;
+      } else {
+        cart.forEach((item, index) => {
+          total += item.price * item.quantity;
+          html += `
+            <div class="cart-item">
+              <div class="item-info">
+                <h3>${item.name}</h3>
+                <p>Preço: R$ ${item.price.toFixed(2)}</p>
+                <p>Quantidade: ${item.quantity}</p>
+              </div>
+              <button class="remove-button" onclick="removeItem(${index})">Remover</button>
+            </div>
+          `;
+        });
+        html += `
+          <div class="cart-total">
+            <h3>Total: R$ ${total.toFixed(2)}</h3>
+          </div>
+        `;
+        html += `<a href="finalizacao.html" class="finalize-button">Finalizar Compra</a>`;
+      }
+      root.innerHTML = html;
+    }
+
+    function removeItem(index) {
+      const cart = getCart();
+      cart.splice(index, 1);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCart();
+    }
+
+    renderCart();
+  </script>
+</body>
+</html>

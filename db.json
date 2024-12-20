@@ -1,0 +1,20 @@
+{
+  "cafes": [
+    {
+      "id": 1,
+      "title": "Black Coffee",
+      "description": "Café preto puro, feito apenas com grãos moídos e água quente.",
+      "ingredients": ["Café"],
+      "price": 3.0,
+      "image": "https://images.unsplash.com/photo-1494314671902-399b18174975"
+    },
+    {
+      "id": 2,
+      "title": "Latte",
+      "description": "Uma mistura cremosa de espresso e leite vaporizado.",
+      "ingredients": ["Espresso", "Leite vaporizado"],
+      "price": 4.5,
+      "image": "https://images.unsplash.com/photo-1561882468-9110e03e0f78"
+    }
+  ]
+}

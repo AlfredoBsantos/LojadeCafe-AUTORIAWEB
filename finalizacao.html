@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finalização de Compra</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #343a40;
+      text-align: center;
+    }
+
+    .form-group label {
+      font-weight: bold;
+    }
+
+    .finalizar-btn {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      width: 100%;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .finalizar-btn:hover {
+      background-color: #218838;
+    }
+
+    .cart-summary {
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    .cart-summary p {
+      margin: 5px 0;
+    }
+
+    .alert-success {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Finalização de Compra</h2>
+    <div id="cart-items" class="cart-summary">
+      <!-- Os itens do carrinho aparecerão aqui -->
+    </div>
+    <form id="checkout-form">
+      <div class="form-group">
+        <label for="endereco">Endereço de Entrega:</label>
+        <input type="text" id="endereco" class="form-control" placeholder="Digite seu endereço" required>
+      </div>
+      <div class="form-group">
+        <label for="pagamento">Método de Pagamento:</label>
+        <select id="pagamento" class="form-control" required>
+          <option value="">Selecione...</option>
+          <option value="cartao">Cartão de Crédito</option>
+          <option value="boleto">Boleto</option>
+          <option value="pix">PIX</option>
+        </select>
+      </div>
+      <button type="submit" class="finalizar-btn">Finalizar</button>
+    </form>
+    <div id="mensagem" class="alert alert-success" style="display: none;">
+      Compra finalizada com sucesso! Obrigado pela preferência.
+    </div>
+  </div>
+
+  <script>
+    // Função para carregar itens do localStorage
+    function carregarCarrinho() {
+      const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+      const cartItemsDiv = document.getElementById("cart-items");
+
+      if (carrinho.length === 0) {
+        cartItemsDiv.innerHTML = "<p>Seu carrinho está vazio.</p>";
+        return;
+      }
+
+      let html = "";
+      let total = 0;
+
+      carrinho.forEach(item => {
+        total += item.price * item.quantity;
+        html += `
+          <p>${item.title} - R$ ${item.price.toFixed(2)} x ${item.quantity}</p>
+        `;
+      });
+
+      html += `<hr><p><strong>Total: R$ ${total.toFixed(2)}</strong></p>`;
+      cartItemsDiv.innerHTML = html;
+    }
+
+    // Validação do formulário
+    document.getElementById("checkout-form").addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const endereco = document.getElementById("endereco").value;
+      const pagamento = document.getElementById("pagamento").value;
+
+      if (endereco.trim() === "" || pagamento === "") {
+        alert("Por favor, preencha todos os campos.");
+        return;
+      }
+
+      // Limpa o carrinho e exibe mensagem
+      localStorage.removeItem("carrinho");
+      document.getElementById("mensagem").style.display = "block";
+      document.getElementById("checkout-form").reset();
+      document.getElementById("cart-items").innerHTML = "<p>Seu carrinho está vazio.</p>";
+    });
+
+    carregarCarrinho();
+  </script>
+</body>
+</html>
